@@ -1,0 +1,6 @@
+
+
+num_epochs: 10
+batch_size: 64
+experiment_folder: "log/default"
+epochs_to_save: 2
