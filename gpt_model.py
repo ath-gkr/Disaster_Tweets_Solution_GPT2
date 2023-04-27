@@ -196,7 +196,7 @@ class TrainingAlg():
 
 			# Calculate average validation loss and accuracy for this epoch
 			avg_val_loss = val_loss / len(self.val_dataloader)
-			val_accuracy = correct_predictions / len(self.val_dataset)
+			val_accuracy = correct_predictions / len(self.val_dataloader)
 
 			
 			# Log the training loss
