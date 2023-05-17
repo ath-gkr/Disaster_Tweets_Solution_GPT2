@@ -21,14 +21,20 @@ class GPT2Classifier(nn.Module):
 		super(GPT2Classifier, self).__init__()
 		self.gpt2 = gpt2_model
 		self.gpt2.requires_grad_(False)  # Freeze the parameters of the GPT-2 model
-		self.dense = nn.Linear(gpt2_model.config.n_embd, num_classes)
+		# self.dense = nn.Linear(gpt2_model.config.n_embd, num_classes)   #When it is just one layer 
+		self.dense1 = nn.Linear(gpt2_model.config.n_embd, 256)
+		self.dense2 = nn.Linear(256, 128)
+		self.dense3 = nn.Linear(128, num_classes)
 		# self.parameters = {}
 		
 	def forward(self, input_ids, attention_mask=None):
 		outputs = self.gpt2(input_ids, attention_mask=attention_mask)
 		hidden_states = outputs.last_hidden_state
 		pooled_output = hidden_states[:, -3]  # Use the last token's hidden state
-		logits = self.dense(pooled_output)
+		x = self.dense1(pooled_output)
+                x = self.dense2(x)
+                logits = self.dense3(x)
+		#logits = self.dense(pooled_output)  # When it is just one layer
 		return logits
 
 
