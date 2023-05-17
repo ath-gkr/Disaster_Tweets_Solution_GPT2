@@ -7,6 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 import yaml	
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
+from tqdm.auto import tqdm
 
 
 import sys
@@ -25,7 +26,7 @@ class GPT2Classifier(nn.Module):
 	def forward(self, input_ids, attention_mask=None):
 		outputs = self.gpt2(input_ids, attention_mask=attention_mask)
 		hidden_states = outputs.last_hidden_state
-		pooled_output = hidden_states[:, -1]  # Use the last token's hidden state
+		pooled_output = hidden_states[:, -3]  # Use the last token's hidden state
 		logits = self.dense(pooled_output)
 		return logits
 
@@ -153,7 +154,7 @@ class TrainingAlg():
 			self.classifier.train()
 			train_loss = 0.0
 
-			for i, batch in enumerate(self.train_dataloader):
+			for i, batch in enumerate(tqdm(self.train_dataloader)):
 				input_ids = batch['input_ids'].to(self.device)
 				attention_mask = batch['attention_mask'].to(self.device)
 				labels = batch['label'].to(self.device)
@@ -170,7 +171,7 @@ class TrainingAlg():
 				self.optimizer.step()
 
 				train_loss += loss.item()
-				print(i)
+				#print(i)
 
 			# Calculate average training loss for this epoch
 			avg_train_loss = train_loss / len(self.train_dataloader)
