@@ -20,6 +20,7 @@ class GPT2Classifier(nn.Module):
 	def __init__(self, gpt2_model, num_classes=2):
 		super(GPT2Classifier, self).__init__()
 		self.gpt2 = gpt2_model
+		self.gpt2.requires_grad_(False)  # Freeze the parameters of the GPT-2 model
 		self.dense = nn.Linear(gpt2_model.config.n_embd, num_classes)
 		# self.parameters = {}
 		
