@@ -162,6 +162,9 @@ class TrainingAlg():
 	def train(self):
 		
 
+		# Create an empty DataFrame to store the results
+		results_df = pd.DataFrame(columns=["Epoch", "Train Loss", "Val Loss", "Accuracy"])
+		
 		#training loop
 		for epoch in range(self.num_epochs):
 			self.classifier.train()
@@ -228,6 +231,17 @@ class TrainingAlg():
 
 
 			print(f"Epoch {epoch+1}/{self.num_epochs}: Train Loss={avg_train_loss:.4f}, Val Loss={avg_val_loss:.4f}, Val Accuracy={val_accuracy:.4f}")
+			print(f"Epoch {epoch+1}/{self.num_epochs}: Train Loss={avg_train_loss:.4f}, Val Loss={avg_val_loss:.4f}, Val Accuracy={val_accuracy:.4f}")
+			# Append the results to the DataFrame
+			results_df = results_df.append({
+				"Epoch": epoch + 1,
+				"Train Loss": avg_train_loss,
+				"Val Loss": avg_val_loss,
+				"Accuracy": val_accuracy
+				}, ignore_index=True)
+
+		# Save the results DataFrame to a CSV file
+		results_df.to_csv("ModGPT2_results.csv", index=False)
 
 
 
