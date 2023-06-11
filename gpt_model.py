@@ -231,7 +231,6 @@ class TrainingAlg():
 
 
 			print(f"Epoch {epoch+1}/{self.num_epochs}: Train Loss={avg_train_loss:.4f}, Val Loss={avg_val_loss:.4f}, Val Accuracy={val_accuracy:.4f}")
-			print(f"Epoch {epoch+1}/{self.num_epochs}: Train Loss={avg_train_loss:.4f}, Val Loss={avg_val_loss:.4f}, Val Accuracy={val_accuracy:.4f}")
 			# Append the results to the DataFrame
 			results_df = results_df.append({
 				"Epoch": epoch + 1,
