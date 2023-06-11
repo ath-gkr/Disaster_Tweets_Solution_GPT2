@@ -22,8 +22,11 @@ class GPT2Classifier(nn.Module):
 		self.gpt2 = gpt2_model
 		self.gpt2.requires_grad_(False)  # Freeze the parameters of the GPT-2 model
 		# self.dense = nn.Linear(gpt2_model.config.n_embd, num_classes)   #When it is just one layer 
+		self.batchnorm1 = nn.BatchNorm1d(gpt2_model.config.n_embd)
 		self.dense1 = nn.Linear(gpt2_model.config.n_embd, 256)
+		self.batchnorm2 = nn.BatchNorm1d(256)
 		self.dense2 = nn.Linear(256, 128)
+		self.batchnorm3 = nn.BatchNorm1d(128)
 		self.dense3 = nn.Linear(128, num_classes)
 		# self.parameters = {}
 		
@@ -31,8 +34,11 @@ class GPT2Classifier(nn.Module):
 		outputs = self.gpt2(input_ids, attention_mask=attention_mask)
 		hidden_states = outputs.last_hidden_state
 		pooled_output = hidden_states[:, -3]  # Use the last token's hidden state
-		x = self.dense1(pooled_output)
-                x = self.dense2(x)
+		x = self.batchnorm1(pooled_output)
+		x = self.dense1(x)
+		x = self.batchnorm2(x)
+		x = self.dense2(x)
+		x = self.batchnorm3(x)
                 logits = self.dense3(x)
 		#logits = self.dense(pooled_output)  # When it is just one layer
 		return logits
